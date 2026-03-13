@@ -34,25 +34,27 @@ else
   echo -e "${RED}Unknown OS. Install tools manually.${NC}"
 fi
 
-# --- Copy configs ---
+# --- Symlink configs ---
 echo
 echo -e "${YELLOW}Installing config files...${NC}"
 
-# Backup existing configs (files, directories, or stale symlinks)
-for target in "$HOME/.zshrc" "$HOME/.zsh"; do
-  if [[ -e "$target" || -L "$target" ]]; then
+# Backup existing configs (real files/dirs, not our own symlinks)
+for target in "$HOME/.zshrc" "$HOME/.zsh" "$HOME/.config/git/config"; do
+  if [[ -e "$target" && ! -L "$target" ]]; then
     backup="$target.backup.$(date +%Y%m%d_%H%M%S)"
     echo "  Backing up $target → $backup"
     mv "$target" "$backup"
+  elif [[ -L "$target" ]]; then
+    rm "$target"
   fi
 done
 
-cp "$REPO_DIR/.zshrc" "$HOME/.zshrc"
-cp -R "$REPO_DIR/.zsh" "$HOME/.zsh"
+ln -sf "$REPO_DIR/.zshrc" "$HOME/.zshrc"
+ln -sf "$REPO_DIR/.zsh" "$HOME/.zsh"
 
 # Git config (XDG standard — git reads ~/.config/git/config natively)
 mkdir -p "$HOME/.config/git"
-cp "$REPO_DIR/config/git/config" "$HOME/.config/git/config"
+ln -sf "$REPO_DIR/config/git/config" "$HOME/.config/git/config"
 
 # Git user details (stored in ~/.gitconfig, separate from shared config)
 if ! git config --file "$HOME/.gitconfig" user.name &>/dev/null; then
@@ -69,13 +71,13 @@ if [[ "$OSTYPE" == darwin* && -d "/Applications/iTerm.app" ]]; then
   echo -e "${YELLOW}Installing iTerm2 profile...${NC}"
   DYNAMIC_DIR="$HOME/Library/Application Support/iTerm2/DynamicProfiles"
   mkdir -p "$DYNAMIC_DIR"
-  cp "$REPO_DIR/iterm2_profile.json" "$DYNAMIC_DIR/ZshModular.json"
+  ln -sf "$REPO_DIR/iterm2_profile.json" "$DYNAMIC_DIR/ZshModular.json"
   defaults write com.googlecode.iterm2 "Default Bookmark Guid" -string "zsh-modular-profile"
 fi
 
 # --- Runtime directories ---
-mkdir -p "$HOME/.zsh/cache"
-[[ ! -f "$HOME/.zsh/local.zsh" ]] && echo "# Local overrides — not tracked in git" > "$HOME/.zsh/local.zsh"
+mkdir -p "$REPO_DIR/.zsh/cache"
+[[ ! -f "$REPO_DIR/.zsh/local.zsh" ]] && echo "# Local overrides — not tracked in git" > "$REPO_DIR/.zsh/local.zsh"
 
 # --- Neovim (kickstart.nvim) ---
 if [[ ! -d "$HOME/.config/nvim" ]]; then
@@ -97,6 +99,6 @@ echo -e "Run ${YELLOW}p10k configure${NC} to set up your prompt."
 echo -e "Enable ${YELLOW}VS Code Settings Sync${NC} for editor preferences."
 echo
 echo -e "${YELLOW}=== Install from the Mac App Store ===${NC}"
-echo "  Wins · 1Password · Plex · Plex Dash · Messenger · Telegram · WhatsApp"
+echo "  Wins · 1Password · Perplexity · Plex · Plex Dash · Messenger · Telegram · WhatsApp"
 echo
 echo -e "Font: ${YELLOW}JetBrainsMono Nerd Font${NC} (terminal + VS Code)"
