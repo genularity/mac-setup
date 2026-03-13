@@ -1,0 +1,17 @@
+# Plugins managed by antidote (https://getantidote.github.io)
+# One plugin per line. Annotations: kind:, branch:, path:
+
+# Theme
+romkatv/powerlevel10k
+
+# Completions (fpath only, no sourcing needed)
+zsh-users/zsh-completions kind:fpath path:src
+
+# Core
+zsh-users/zsh-autosuggestions
+zsh-users/zsh-history-substring-search
+hlissner/zsh-autopair
+lukechilds/zsh-nvm
+
+# Syntax highlighting (must be last)
+z-shell/F-Sy-H

@@ -1,0 +1,11 @@
+local.zsh
+.zsh/cache/
+.DS_Store
+*.swp
+*.swo
+*~
+*.tmp
+*.log
+*.key
+*.pem
+*.secret

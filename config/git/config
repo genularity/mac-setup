@@ -1,0 +1,39 @@
+[user]
+	name = Kent Martin
+	email = kent@kentsworld.com
+
+[credential]
+	helper = /opt/homebrew/bin/op plugin run -- gh auth git-credential
+
+[core]
+	editor = nvim
+
+[init]
+	defaultBranch = main
+
+[pull]
+	rebase = true
+
+[push]
+	autoSetupRemote = true
+
+[diff]
+	algorithm = histogram
+
+[merge]
+	conflictstyle = zdiff3
+
+[fetch]
+	prune = true
+
+[rerere]
+	enabled = true
+
+[alias]
+	lg = log --oneline --graph --decorate --all
+	st = status -sb
+	co = checkout
+	br = branch
+	cm = commit
+	last = log -1 HEAD --stat
+	unstage = reset HEAD --
