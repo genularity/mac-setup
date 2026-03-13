@@ -10,7 +10,7 @@ fi
 command -v dust  &>/dev/null && alias du='dust'
 command -v duf   &>/dev/null && alias df='duf'
 command -v rg    &>/dev/null && alias grep='rg'
-command -v doggo &>/dev/null && alias nslookup='doggo'
+command -v doggo &>/dev/null && alias nslookup='doggo' dig='doggo'
 command -v gping &>/dev/null && alias ping='gping'
 command -v nvim &>/dev/null && alias vi='nvim' vim='nvim' v='nvim'
 
