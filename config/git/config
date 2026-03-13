@@ -1,7 +1,3 @@
-[user]
-	name = Kent Martin
-	email = kent@kentsworld.com
-
 [credential]
 	helper = /opt/homebrew/bin/op plugin run -- gh auth git-credential
 
