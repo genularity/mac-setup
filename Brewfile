@@ -54,7 +54,6 @@ cask "ice"
 cask "iina"
 cask "iterm2"
 cask "obsidian"
-cask "perplexity"
 cask "podman-desktop"
 cask "vlc"
 
