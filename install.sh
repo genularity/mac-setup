@@ -101,6 +101,25 @@ if [[ "$OSTYPE" == darwin* ]]; then
     end tell'
 fi
 
+# --- VS Code terminal font ---
+VSCODE_SETTINGS="$HOME/Library/Application Support/Code/User/settings.json"
+if [[ -f "$VSCODE_SETTINGS" ]]; then
+  if ! grep -q 'terminal.integrated.fontFamily' "$VSCODE_SETTINGS"; then
+    echo -e "${YELLOW}Setting VS Code terminal font...${NC}"
+    # Insert font settings before the closing brace
+    sed -i '' 's/}$/,\n    "terminal.integrated.fontFamily": "JetBrainsMono Nerd Font Mono",\n    "terminal.integrated.fontSize": 14\n}/' "$VSCODE_SETTINGS"
+  fi
+elif [[ "$OSTYPE" == darwin* ]]; then
+  echo -e "${YELLOW}Creating VS Code settings with terminal font...${NC}"
+  mkdir -p "$(dirname "$VSCODE_SETTINGS")"
+  cat > "$VSCODE_SETTINGS" << 'VSCEOF'
+{
+    "terminal.integrated.fontFamily": "JetBrainsMono Nerd Font Mono",
+    "terminal.integrated.fontSize": 14
+}
+VSCEOF
+fi
+
 # --- macOS defaults ---
 if [[ "$OSTYPE" == darwin* && -f "$REPO_DIR/macos_defaults.sh" ]]; then
   echo
