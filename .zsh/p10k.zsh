@@ -24,10 +24,7 @@
     command_execution_time
     background_jobs
     virtualenv
-    nodeenv
     nvm
-    nodenv
-    goenv
     kubecontext
   )
 
@@ -197,25 +194,9 @@
   typeset -g POWERLEVEL9K_VIRTUALENV_SHOW_PYTHON_VERSION=false
   typeset -g POWERLEVEL9K_VIRTUALENV_{GENERIC,PROJECT_SPECIFIED}_CONTENT_EXPANSION=
 
-  # === Node (nvm + nodenv + nodeenv) ===
+  # === Node (nvm) ===
   typeset -g POWERLEVEL9K_NVM_FOREGROUND=0
   typeset -g POWERLEVEL9K_NVM_BACKGROUND=2
-  typeset -g POWERLEVEL9K_NODENV_FOREGROUND=0
-  typeset -g POWERLEVEL9K_NODENV_BACKGROUND=2
-  typeset -g POWERLEVEL9K_NODENV_SOURCES=(shell local global)
-  typeset -g POWERLEVEL9K_NODENV_PROMPT_ALWAYS_SHOW=false
-  typeset -g POWERLEVEL9K_NODENV_SHOW_SYSTEM=true
-  typeset -g POWERLEVEL9K_NODEENV_FOREGROUND=2
-  typeset -g POWERLEVEL9K_NODEENV_BACKGROUND=0
-  typeset -g POWERLEVEL9K_NODEENV_SHOW_NODE_VERSION=false
-  typeset -g POWERLEVEL9K_NODEENV_{GENERIC,PROJECT_SPECIFIED}_CONTENT_EXPANSION=
-
-  # === Go (goenv) ===
-  typeset -g POWERLEVEL9K_GOENV_FOREGROUND=0
-  typeset -g POWERLEVEL9K_GOENV_BACKGROUND=4
-  typeset -g POWERLEVEL9K_GOENV_SOURCES=(shell local global)
-  typeset -g POWERLEVEL9K_GOENV_PROMPT_ALWAYS_SHOW=false
-  typeset -g POWERLEVEL9K_GOENV_SHOW_SYSTEM=true
 
   # === kubecontext ===
   typeset -g POWERLEVEL9K_KUBECONTEXT_SHOW_ON_COMMAND='kubectl|helm|kubectx|kubens|oc|istioctl|kogito|k9s|helmfile|flux|fluxctl|stern|kubeseal|skaffold|kubent|kubelogin|kustomize|k'
