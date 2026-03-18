@@ -61,7 +61,7 @@ Run from **Terminal.app**, not iTerm2 — the script modifies iTerm2 settings.
 
 ### CLI tools (Homebrew)
 
-`antidote` `bat` `btop` `claude-code` `curl` `doggo` `duf` `dust` `fd` `gh` `git` `gping` `helm` `httpie` `jq` `k9s` `kubectx` `kubernetes-cli` `lsd` `neovim` `podman` `procs` `ripgrep` `rsync` `uv` `watch` `wget` `zoxide`
+`antidote` `bat` `btop` `curl` `git-delta` `doggo` `duf` `dust` `fd` `gh` `git` `gping` `helm` `httpie` `jq` `k9s` `kubectx` `kubernetes-cli` `lsd` `neovim` `podman` `procs` `ripgrep` `rsync` `tree-sitter-cli` `uv` `watch` `wget` `zoxide`
 
 ### GNU tools
 
@@ -69,11 +69,11 @@ Run from **Terminal.app**, not iTerm2 — the script modifies iTerm2 settings.
 
 ### Fonts
 
-JetBrains Mono Nerd Font, Meslo LG Nerd Font
+JetBrains Mono Nerd Font, Meslo LG Nerd Font — auto-configured for Terminal.app, iTerm2, and VS Code
 
 ### Apps (Homebrew Cask)
 
-AppCleaner, ChatGPT, Claude, CleanShot, Firefox, Google Chrome, Ice, IINA, iTerm2, Obsidian, Podman Desktop, VLC
+ChatGPT, Claude, Claude Code, CleanShot, Firefox, Google Chrome, Ice, IINA, iTerm2, Obsidian, Podman Desktop, VS Code, VLC
 
 ### VS Code extensions
 
@@ -92,13 +92,13 @@ Powerlevel10k, zsh-completions, zsh-autosuggestions, zsh-history-substring-searc
 | `du` | dust |
 | `df` | duf |
 | `grep` | ripgrep |
-| `nslookup` | doggo |
+| `nslookup` / `dig` | doggo |
 | `ping` | gping |
 | `vi` / `vim` | neovim |
 
 ### Git config
 
-Symlinked to `~/.config/git/config`. Includes histogram diffs, zdiff3 merge conflicts, auto-setup remote on push, pull with rebase, fetch with prune, rerere, and common aliases. Git identity is prompted on first install and stored separately in `~/.gitconfig`.
+Symlinked to `~/.config/git/config`. Includes delta (side-by-side syntax-highlighted diffs), histogram diff algorithm, zdiff3 merge conflicts, auto-setup remote on push, pull with rebase, fetch with prune, rerere, and common aliases. Git identity is prompted on first install and stored separately in `~/.gitconfig`.
 
 ### macOS defaults
 
