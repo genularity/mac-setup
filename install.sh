@@ -120,6 +120,23 @@ elif [[ "$OSTYPE" == darwin* ]]; then
 VSCEOF
 fi
 
+# --- Claude Code statusline ---
+if command -v npx &>/dev/null; then
+  CLAUDE_SETTINGS="$HOME/.claude/settings.json"
+  mkdir -p "$HOME/.claude"
+  if [[ ! -f "$CLAUDE_SETTINGS" ]]; then
+    echo -e "${YELLOW}Configuring Claude Code statusline...${NC}"
+    cat > "$CLAUDE_SETTINGS" << 'CLEOF'
+{
+  "statusLine": {
+    "type": "command",
+    "command": "npx -y @owloops/claude-powerline --theme=tokyo-night --style=powerline"
+  }
+}
+CLEOF
+  fi
+fi
+
 # --- macOS defaults ---
 if [[ "$OSTYPE" == darwin* && -f "$REPO_DIR/macos_defaults.sh" ]]; then
   echo
