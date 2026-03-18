@@ -24,7 +24,6 @@
     command_execution_time
     background_jobs
     virtualenv
-    pyenv
     nodeenv
     nvm
     nodenv
@@ -192,18 +191,11 @@
   typeset -g POWERLEVEL9K_BACKGROUND_JOBS_BACKGROUND=0
   typeset -g POWERLEVEL9K_BACKGROUND_JOBS_VERBOSE=false
 
-  # === Python (virtualenv + pyenv) ===
+  # === Python (virtualenv) ===
   typeset -g POWERLEVEL9K_VIRTUALENV_FOREGROUND=0
   typeset -g POWERLEVEL9K_VIRTUALENV_BACKGROUND=4
   typeset -g POWERLEVEL9K_VIRTUALENV_SHOW_PYTHON_VERSION=false
-  typeset -g POWERLEVEL9K_VIRTUALENV_SHOW_WITH_PYENV=false
   typeset -g POWERLEVEL9K_VIRTUALENV_{GENERIC,PROJECT_SPECIFIED}_CONTENT_EXPANSION=
-  typeset -g POWERLEVEL9K_PYENV_FOREGROUND=0
-  typeset -g POWERLEVEL9K_PYENV_BACKGROUND=4
-  typeset -g POWERLEVEL9K_PYENV_SOURCES=(shell local global)
-  typeset -g POWERLEVEL9K_PYENV_PROMPT_ALWAYS_SHOW=false
-  typeset -g POWERLEVEL9K_PYENV_SHOW_SYSTEM=true
-  typeset -g POWERLEVEL9K_PYENV_CONTENT_EXPANSION='${P9K_CONTENT}${${P9K_PYENV_PYTHON_VERSION:#$P9K_CONTENT}:+ $P9K_PYENV_PYTHON_VERSION}'
 
   # === Node (nvm + nodenv + nodeenv) ===
   typeset -g POWERLEVEL9K_NVM_FOREGROUND=0
