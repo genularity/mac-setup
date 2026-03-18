@@ -16,6 +16,12 @@ if [[ "$OSTYPE" == darwin* ]]; then
   if ! command -v brew &>/dev/null; then
     echo -e "${YELLOW}Installing Homebrew...${NC}"
     /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+    # Add Homebrew to PATH for the rest of this script
+    if [[ -f /opt/homebrew/bin/brew ]]; then
+      eval "$(/opt/homebrew/bin/brew shellenv)"
+    elif [[ -f /usr/local/bin/brew ]]; then
+      eval "$(/usr/local/bin/brew shellenv)"
+    fi
   fi
   echo -e "${YELLOW}Installing packages from Brewfile...${NC}"
   brew bundle --verbose --file="$REPO_DIR/Brewfile"
@@ -83,6 +89,16 @@ mkdir -p "$REPO_DIR/.zsh/cache"
 if [[ ! -d "$HOME/.config/nvim" ]]; then
   echo -e "${YELLOW}Installing kickstart.nvim...${NC}"
   git clone --depth=1 https://github.com/nvim-lua/kickstart.nvim.git "$HOME/.config/nvim"
+fi
+
+# --- Terminal.app font ---
+if [[ "$OSTYPE" == darwin* ]]; then
+  echo -e "${YELLOW}Setting Terminal.app font to JetBrainsMono Nerd Font...${NC}"
+  osascript -e '
+    tell application "Terminal"
+      set font name of settings set "Basic" to "JetBrainsMonoNFM-Regular"
+      set font size of settings set "Basic" to 14
+    end tell'
 fi
 
 # --- macOS defaults ---
