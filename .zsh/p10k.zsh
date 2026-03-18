@@ -83,7 +83,7 @@
   typeset -g POWERLEVEL9K_VCS_CONFLICTED_BACKGROUND=238
   typeset -g POWERLEVEL9K_VCS_LOADING_BACKGROUND=236
   typeset -g POWERLEVEL9K_VCS_BRANCH_ICON='\uF126 '
-  typeset -g POWERLEVEL9K_VCS_UNTRACKED_ICON='?'
+  typeset -g POWERLEVEL9K_VCS_UNTRACKED_ICON='\uF059 '
 
   function my_git_formatter() {
     emulate -L zsh
@@ -97,6 +97,11 @@
     local   modified='%216F'
     local  untracked='%110F'
     local conflicted='%204F'
+
+    local icon_staged=$'\uF067'
+    local icon_unstaged=$'\uF040'
+    local icon_conflict=$'\uF0E7'
+    local icon_stash=$'\uF01C'
 
     local res
 
@@ -131,11 +136,11 @@
     (( VCS_STATUS_PUSH_COMMITS_BEHIND )) && res+=" ${clean}⇠${VCS_STATUS_PUSH_COMMITS_BEHIND}"
     (( VCS_STATUS_PUSH_COMMITS_AHEAD && !VCS_STATUS_PUSH_COMMITS_BEHIND )) && res+=" "
     (( VCS_STATUS_PUSH_COMMITS_AHEAD  )) && res+="${clean}⇢${VCS_STATUS_PUSH_COMMITS_AHEAD}"
-    (( VCS_STATUS_STASHES        )) && res+=" ${clean}*${VCS_STATUS_STASHES}"
+    (( VCS_STATUS_STASHES        )) && res+=" ${clean}${icon_stash} ${VCS_STATUS_STASHES}"
     [[ -n $VCS_STATUS_ACTION     ]] && res+=" ${conflicted}${VCS_STATUS_ACTION}"
-    (( VCS_STATUS_NUM_CONFLICTED )) && res+=" ${conflicted}~${VCS_STATUS_NUM_CONFLICTED}"
-    (( VCS_STATUS_NUM_STAGED     )) && res+=" ${modified}+${VCS_STATUS_NUM_STAGED}"
-    (( VCS_STATUS_NUM_UNSTAGED   )) && res+=" ${modified}!${VCS_STATUS_NUM_UNSTAGED}"
+    (( VCS_STATUS_NUM_CONFLICTED )) && res+=" ${conflicted}${icon_conflict} ${VCS_STATUS_NUM_CONFLICTED}"
+    (( VCS_STATUS_NUM_STAGED     )) && res+=" ${modified}${icon_staged} ${VCS_STATUS_NUM_STAGED}"
+    (( VCS_STATUS_NUM_UNSTAGED   )) && res+=" ${modified}${icon_unstaged} ${VCS_STATUS_NUM_UNSTAGED}"
     (( VCS_STATUS_NUM_UNTRACKED  )) && res+=" ${untracked}${(g::)POWERLEVEL9K_VCS_UNTRACKED_ICON}${VCS_STATUS_NUM_UNTRACKED}"
     (( VCS_STATUS_HAS_UNSTAGED == -1 )) && res+=" ${modified}─"
 

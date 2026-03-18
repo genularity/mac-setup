@@ -5,6 +5,11 @@ if [[ -d /opt/homebrew/share/zsh/site-functions ]]; then
   fpath=(/opt/homebrew/share/zsh/site-functions $fpath)
 fi
 
+# Keg-only tools (not auto-linked by Homebrew)
+if [[ -d /opt/homebrew/opt/curl/share/zsh/site-functions ]]; then
+  fpath=(/opt/homebrew/opt/curl/share/zsh/site-functions $fpath)
+fi
+
 # Initialize compinit (regenerate dump every 24h)
 autoload -Uz compinit
 if [[ -n ~/.zcompdump(#qN.mh+24) ]]; then
@@ -13,8 +18,12 @@ else
   compinit -C
 fi
 
-# Bash completion compatibility (needed by tools like aws, terraform)
+# Bash completion compatibility (needed by tools like aws, terraform, httpie)
 autoload -U +X bashcompinit && bashcompinit
+[[ -f /opt/homebrew/etc/bash_completion.d/httpie ]] && source /opt/homebrew/etc/bash_completion.d/httpie
+
+# 1Password CLI
+command -v op &>/dev/null && eval "$(op completion zsh)" 2>/dev/null
 
 # --- Styles ---
 zstyle ':completion:*' use-cache on
