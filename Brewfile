@@ -41,7 +41,8 @@ brew "grep"
 cask "font-jetbrains-mono-nerd-font"
 cask "font-meslo-lg-nerd-font"
 
-# 1Password CLI (for git credential helper + SSH agent)
+# 1Password (app + CLI for git credential helper + SSH agent)
+cask "1password"
 cask "1password-cli"
 
 # Apps
