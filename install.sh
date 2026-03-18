@@ -7,8 +7,11 @@ RED='\033[0;31m'
 NC='\033[0m'
 
 REPO_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+FORCE=false
+[[ "$1" == "--force" || "$1" == "-f" ]] && FORCE=true
 
 echo -e "${GREEN}=== Dev Environment Setup ===${NC}"
+$FORCE && echo -e "${YELLOW}(force mode — reapplying all configs)${NC}"
 echo
 
 # --- Package Installation ---
@@ -63,7 +66,7 @@ mkdir -p "$HOME/.config/git"
 ln -sf "$REPO_DIR/config/git/config" "$HOME/.config/git/config"
 
 # Git user details (stored in ~/.gitconfig, separate from shared config)
-if ! git config --file "$HOME/.gitconfig" user.name &>/dev/null; then
+if $FORCE || ! git config --file "$HOME/.gitconfig" user.name &>/dev/null; then
   echo
   echo -e "${YELLOW}Configure git identity:${NC}"
   read -rp "  Name:  " git_name
@@ -86,7 +89,7 @@ mkdir -p "$REPO_DIR/.zsh/cache"
 [[ ! -f "$REPO_DIR/.zsh/local.zsh" ]] && echo "# Local overrides — not tracked in git" > "$REPO_DIR/.zsh/local.zsh"
 
 # --- Neovim (kickstart.nvim) ---
-if [[ ! -d "$HOME/.config/nvim" ]]; then
+if $FORCE || [[ ! -d "$HOME/.config/nvim" ]]; then
   echo -e "${YELLOW}Installing kickstart.nvim...${NC}"
   git clone --depth=1 https://github.com/nvim-lua/kickstart.nvim.git "$HOME/.config/nvim"
 fi
@@ -104,7 +107,7 @@ fi
 # --- VS Code terminal font ---
 VSCODE_SETTINGS="$HOME/Library/Application Support/Code/User/settings.json"
 if [[ -f "$VSCODE_SETTINGS" ]]; then
-  if ! grep -q 'terminal.integrated.fontFamily' "$VSCODE_SETTINGS"; then
+  if $FORCE || ! grep -q 'terminal.integrated.fontFamily' "$VSCODE_SETTINGS"; then
     echo -e "${YELLOW}Setting VS Code terminal font...${NC}"
     # Insert font settings before the closing brace
     sed -i '' 's/}$/,\n    "terminal.integrated.fontFamily": "JetBrainsMono Nerd Font Mono",\n    "terminal.integrated.fontSize": 14\n}/' "$VSCODE_SETTINGS"
@@ -124,7 +127,7 @@ fi
 if command -v npx &>/dev/null; then
   CLAUDE_SETTINGS="$HOME/.claude/settings.json"
   mkdir -p "$HOME/.claude"
-  if [[ ! -f "$CLAUDE_SETTINGS" ]]; then
+  if $FORCE || [[ ! -f "$CLAUDE_SETTINGS" ]]; then
     echo -e "${YELLOW}Configuring Claude Code statusline...${NC}"
     cat > "$CLAUDE_SETTINGS" << 'CLEOF'
 {
