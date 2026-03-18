@@ -109,8 +109,8 @@ VSCODE_SETTINGS="$HOME/Library/Application Support/Code/User/settings.json"
 if [[ -f "$VSCODE_SETTINGS" ]]; then
   if $FORCE || ! grep -q 'terminal.integrated.fontFamily' "$VSCODE_SETTINGS"; then
     echo -e "${YELLOW}Setting VS Code terminal font...${NC}"
-    # Insert font settings before the closing brace
-    sed -i '' 's/}$/,\n    "terminal.integrated.fontFamily": "JetBrainsMono Nerd Font Mono",\n    "terminal.integrated.fontSize": 14\n}/' "$VSCODE_SETTINGS"
+    # Insert font settings before the closing brace (gsed supports \n, macOS sed doesn't)
+    gsed -i 's/}$/,\n    "terminal.integrated.fontFamily": "JetBrainsMono Nerd Font Mono",\n    "terminal.integrated.fontSize": 14\n}/' "$VSCODE_SETTINGS"
   fi
 elif [[ "$OSTYPE" == darwin* ]]; then
   echo -e "${YELLOW}Creating VS Code settings with terminal font...${NC}"
