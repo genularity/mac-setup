@@ -11,7 +11,11 @@ FORCE=false
 [[ "$1" == "--force" || "$1" == "-f" ]] && FORCE=true
 
 echo -e "${GREEN}=== Dev Environment Setup ===${NC}"
-$FORCE && echo -e "${YELLOW}(force mode — reapplying all configs)${NC}"
+if $FORCE; then
+  echo -e "${YELLOW}(force mode — reapplying all configs)${NC}"
+  echo -e "${YELLOW}Clearing caches...${NC}"
+  rm -rf "$HOME/.zcompdump"* "$HOME/.cache/p10k-"* "$HOME/.zsh/cache" "$HOME/Library/Caches/antidote"
+fi
 echo
 
 # --- Package Installation ---
@@ -43,27 +47,25 @@ else
   echo -e "${RED}Unknown OS. Install tools manually.${NC}"
 fi
 
-# --- Symlink configs ---
+# --- Copy configs ---
 echo
 echo -e "${YELLOW}Installing config files...${NC}"
 
-# Backup existing configs (real files/dirs, not our own symlinks)
+# Backup existing configs (real files/dirs, not symlinks we previously installed)
 for target in "$HOME/.zshrc" "$HOME/.zsh" "$HOME/.config/git/config"; do
-  if [[ -e "$target" && ! -L "$target" ]]; then
+  if [[ -e "$target" || -L "$target" ]]; then
     backup="$target.backup.$(date +%Y%m%d_%H%M%S)"
     echo "  Backing up $target → $backup"
     mv "$target" "$backup"
-  elif [[ -L "$target" ]]; then
-    rm "$target"
   fi
 done
 
-ln -sf "$REPO_DIR/.zshrc" "$HOME/.zshrc"
-ln -sf "$REPO_DIR/.zsh" "$HOME/.zsh"
+cp "$REPO_DIR/.zshrc" "$HOME/.zshrc"
+cp -R "$REPO_DIR/.zsh" "$HOME/.zsh"
 
 # Git config (XDG standard — git reads ~/.config/git/config natively)
 mkdir -p "$HOME/.config/git"
-ln -sf "$REPO_DIR/config/git/config" "$HOME/.config/git/config"
+cp "$REPO_DIR/config/git/config" "$HOME/.config/git/config"
 
 # Git user details (stored in ~/.gitconfig, separate from shared config)
 if $FORCE || ! git config --file "$HOME/.gitconfig" user.name &>/dev/null; then
@@ -80,17 +82,18 @@ if [[ "$OSTYPE" == darwin* && -d "/Applications/iTerm.app" ]]; then
   echo -e "${YELLOW}Installing iTerm2 profile...${NC}"
   DYNAMIC_DIR="$HOME/Library/Application Support/iTerm2/DynamicProfiles"
   mkdir -p "$DYNAMIC_DIR"
-  ln -sf "$REPO_DIR/iterm2_profile.json" "$DYNAMIC_DIR/ZshModular.json"
+  cp "$REPO_DIR/iterm2_profile.json" "$DYNAMIC_DIR/ZshModular.json"
   defaults write com.googlecode.iterm2 "Default Bookmark Guid" -string "zsh-modular-profile"
 fi
 
 # --- Runtime directories ---
-mkdir -p "$REPO_DIR/.zsh/cache"
-[[ ! -f "$REPO_DIR/.zsh/local.zsh" ]] && echo "# Local overrides — not tracked in git" > "$REPO_DIR/.zsh/local.zsh"
+mkdir -p "$HOME/.zsh/cache"
+[[ ! -f "$HOME/.zsh/local.zsh" ]] && echo "# Local overrides — not tracked in git" > "$HOME/.zsh/local.zsh"
 
 # --- Neovim (kickstart.nvim) ---
 if $FORCE || [[ ! -d "$HOME/.config/nvim" ]]; then
   echo -e "${YELLOW}Installing kickstart.nvim...${NC}"
+  $FORCE && rm -rf "$HOME/.config/nvim"
   git clone --depth=1 https://github.com/nvim-lua/kickstart.nvim.git "$HOME/.config/nvim"
 fi
 
