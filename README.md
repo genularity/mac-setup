@@ -1,6 +1,6 @@
 # mac-setup
 
-Automated provisioning for a fresh Mac. One script installs everything, symlinks all configs, and applies system preferences. The repo is the single source of truth — edit files here, not in `~`.
+Automated provisioning for a fresh Mac. One script installs everything, copies configs into place, and applies system preferences. The repo can be deleted after install.
 
 ## How it works
 
@@ -9,17 +9,17 @@ flowchart TD
     A["<b>install.sh</b><br/><i>bash install.sh</i>"]:::entry
 
     A --> B["<b>brew bundle</b><br/>Brewfile"]
-    A --> C["<b>Symlink Configs</b><br/>repo → ~/"]
+    A --> C["<b>Copy Configs</b><br/>repo → ~/"]
     A --> D["<b>macOS Defaults</b><br/>macos_defaults.sh"]
 
     B --> B1["CLI Tools<br/><code>bat btop fd gh jq lsd<br/>neovim ripgrep uv zoxide ...</code>"]:::pkg
     B --> B2["Apps & Fonts<br/><code>iTerm2 Chrome Firefox<br/>Obsidian Claude VS Code ...</code>"]:::pkg
     B --> B3["VS Code Extensions<br/><code>Ruff Prettier Terraform<br/>Python Error Lens ...</code>"]:::pkg
 
-    C --> C1["<code>~/.zshrc → .zshrc</code>"]:::sym
-    C --> C2["<code>~/.zsh/ → .zsh/</code>"]:::sym
-    C --> C3["<code>~/.config/git/config<br/>→ config/git/config</code>"]:::sym
-    C --> C4["<code>iTerm2 DynamicProfiles<br/>→ iterm2_profile.json</code>"]:::sym
+    C --> C1["<code>~/.zshrc</code>"]:::sym
+    C --> C2["<code>~/.zsh/</code>"]:::sym
+    C --> C3["<code>~/.config/git/config</code>"]:::sym
+    C --> C4["<code>iTerm2 DynamicProfiles</code>"]:::sym
 
     D --> D1["Keyboard — fast repeat"]:::def
     D --> D2["Finder — list view, extensions, path bar"]:::def
@@ -98,7 +98,7 @@ Powerlevel10k, zsh-completions, zsh-autosuggestions, zsh-history-substring-searc
 
 ### Git config
 
-Symlinked to `~/.config/git/config`. Includes delta (side-by-side syntax-highlighted diffs), histogram diff algorithm, zdiff3 merge conflicts, auto-setup remote on push, pull with rebase, fetch with prune, rerere, and common aliases. Git identity is prompted on first install and stored separately in `~/.gitconfig`.
+Copied to `~/.config/git/config`. Includes delta (side-by-side syntax-highlighted diffs), histogram diff algorithm, zdiff3 merge conflicts, auto-setup remote on push, pull with rebase, fetch with prune, rerere, and common aliases. Git identity is prompted on first install and stored separately in `~/.gitconfig`.
 
 ### macOS defaults
 
