@@ -92,7 +92,9 @@ if [[ "$OSTYPE" == darwin* && -d "/Applications/iTerm.app" ]]; then
   echo -e "${YELLOW}Installing iTerm2 profile...${NC}"
   DYNAMIC_DIR="$HOME/Library/Application Support/iTerm2/DynamicProfiles"
   mkdir -p "$DYNAMIC_DIR"
-  cp "$REPO_DIR/iterm2_profile.json" "$DYNAMIC_DIR/ZshModular.json"
+  if [[ ! "$REPO_DIR/iterm2_profile.json" -ef "$DYNAMIC_DIR/ZshModular.json" ]]; then
+    cp "$REPO_DIR/iterm2_profile.json" "$DYNAMIC_DIR/ZshModular.json"
+  fi
   defaults write com.googlecode.iterm2 "Default Bookmark Guid" -string "zsh-modular-profile"
 fi
 
