@@ -8,7 +8,13 @@ NC='\033[0m'
 
 REPO_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 FORCE=false
-[[ "$1" == "--force" || "$1" == "-f" ]] && FORCE=true
+SKIP_BACKUP=false
+for arg in "$@"; do
+  case "$arg" in
+    --force|-f) FORCE=true ;;
+    --skip-backup) SKIP_BACKUP=true ;;
+  esac
+done
 
 echo -e "${GREEN}=== Dev Environment Setup ===${NC}"
 if $FORCE; then
@@ -51,12 +57,16 @@ fi
 echo
 echo -e "${YELLOW}Installing config files...${NC}"
 
-# Backup existing configs (real files/dirs, not symlinks we previously installed)
+# Backup or remove existing configs
 for target in "$HOME/.zshrc" "$HOME/.zsh" "$HOME/.config/git/config"; do
   if [[ -e "$target" || -L "$target" ]]; then
-    backup="$target.backup.$(date +%Y%m%d_%H%M%S)"
-    echo "  Backing up $target → $backup"
-    mv "$target" "$backup"
+    if $SKIP_BACKUP; then
+      rm -rf "$target"
+    else
+      backup="$target.backup.$(date +%Y%m%d_%H%M%S)"
+      echo "  Backing up $target → $backup"
+      mv "$target" "$backup"
+    fi
   fi
 done
 
