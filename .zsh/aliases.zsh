@@ -27,3 +27,9 @@ zsh-update-plugins() {
   antidote update
   exec zsh
 }
+
+# Kill all Claude Code processes (agents, subagents, background tasks)
+killallclaude() {
+  pkill -f 'claude' 2>/dev/null
+  echo "Killed all Claude processes"
+}
