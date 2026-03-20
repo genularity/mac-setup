@@ -60,7 +60,10 @@ echo -e "${YELLOW}Installing config files...${NC}"
 # Backup or remove existing configs
 for target in "$HOME/.zshrc" "$HOME/.zsh" "$HOME/.config/git/config"; do
   if [[ -e "$target" || -L "$target" ]]; then
-    if $SKIP_BACKUP; then
+    if [[ -L "$target" ]]; then
+      echo "  Removing symlink $target → $(readlink "$target")"
+      rm -f "$target"
+    elif $SKIP_BACKUP; then
       rm -rf "$target"
     else
       backup="$target.backup.$(date +%Y%m%d_%H%M%S)"

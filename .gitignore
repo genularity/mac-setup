@@ -10,3 +10,6 @@ local.zsh
 *.key
 *.pem
 *.secret
+.env*
+.claude
+*.pyc
