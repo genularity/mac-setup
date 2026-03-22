@@ -21,19 +21,19 @@ mkcd() { mkdir -p "$1" && cd "$1" }
 # Create and cd into a /tmp dir with a random Docker-style name
 mkt() {
   local adjectives=(
-    wobbly cranky chonky sneaky grumpy zappy bouncy fizzy wonky sassy
-    fluffy dizzy snappy quirky nippy zippy jolly bonkers cheeky dapper
-    frisky giddy lanky plucky shifty spunky wacky yappy cosmic groovy
-    turbo mega ultra hyper funky punky crispy crunchy tangy salty
-    spicy breezy dusty rusty glossy frosty toasty gritty nifty witty
+    wobbly chonky zappy bouncy fizzy wonky sassy fluffy dizzy snappy
+    quirky zippy jolly bonkers cheeky dapper frisky giddy plucky spunky
+    wacky cosmic groovy turbo mega hyper funky toasty nifty witty
+    breezy glossy bubbly peppy zesty perky snazzy jazzy spiffy
+    chipper giggly wiggly sparkly squiggly floofy cuddly sprightly dandy
   )
   local animals=(
-    quokka platypus wombat echidna bilby numbat quoll bandicoot
-    cassowary kookaburra cockatoo galah lorikeet budgie emu
-    goanna thornydevil taipan dugong barramundi lyrebird bettong
-    potoroo pademelon dingo wallaby koala possum glider sugar-glider
-    crocodile frillneck bluetongue redback huntsman magpie currawong
-    ibis brolga jabiru pelican penguin boobook tawny-frogmouth
+    kangaroo koala platypus echidna wombat quokka wallaby dingo
+    emu kookaburra cockatoo galah
+    tasmanian-devil sugar-glider frillneck goanna dugong bilby
+    barramundi magpie ibis
+    crocodile king-brown-snake tiger-snake redback-spider funnel-web-spider
+    shark box-jellyfish stonefish bluebottle blue-ringed-octopus huntsman-spider
   )
   local dir attempts=0
   while (( attempts++ < 100 )); do
