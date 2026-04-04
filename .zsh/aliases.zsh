@@ -4,7 +4,7 @@
 command -v lsd   &>/dev/null && alias ls='lsd'
 if command -v bat &>/dev/null; then
   alias cat='bat'
-  export BAT_THEME="TwoDark"
+  export BAT_THEME="tokyonight_night"
   export BAT_STYLE="numbers,changes,header"
 fi
 command -v dust  &>/dev/null && alias du='dust'
