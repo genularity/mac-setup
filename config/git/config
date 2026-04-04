@@ -12,7 +12,7 @@
 	navigate = true
 	side-by-side = true
 	line-numbers = true
-	syntax-theme = TwoDark
+	syntax-theme = tokyonight_night
 
 [init]
 	defaultBranch = main
