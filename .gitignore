@@ -13,3 +13,4 @@ local.zsh
 .env*
 .claude
 *.pyc
+docs/superpowers/
