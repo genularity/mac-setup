@@ -26,6 +26,8 @@ brew "ripgrep"
 brew "rsync"
 brew "tree-sitter-cli"
 brew "uv"
+brew "screen"
+brew "tmux"
 brew "watch"
 brew "wget"
 brew "zoxide"
@@ -42,7 +44,7 @@ brew "grep"
 cask "font-jetbrains-mono-nerd-font"
 cask "font-meslo-lg-nerd-font"
 
-# 1Password (app + CLI for git credential helper + SSH agent)
+# 1Password
 cask "1password"
 cask "1password-cli"
 

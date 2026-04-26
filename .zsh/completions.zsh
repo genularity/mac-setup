@@ -22,9 +22,6 @@ fi
 autoload -U +X bashcompinit && bashcompinit
 [[ -f /opt/homebrew/etc/bash_completion.d/httpie ]] && source /opt/homebrew/etc/bash_completion.d/httpie
 
-# 1Password CLI
-command -v op &>/dev/null && eval "$(op completion zsh)" 2>/dev/null
-
 # --- Styles ---
 zstyle ':completion:*' use-cache on
 zstyle ':completion:*' cache-path ~/.zsh/cache

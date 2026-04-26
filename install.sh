@@ -58,7 +58,7 @@ echo
 echo -e "${YELLOW}Installing config files...${NC}"
 
 # Backup or remove existing configs
-for target in "$HOME/.zshrc" "$HOME/.zsh" "$HOME/.config/git/config"; do
+for target in "$HOME/.zshrc" "$HOME/.zsh" "$HOME/.config/git/config" "$HOME/.tmux.conf" "$HOME/.screenrc"; do
   if [[ -e "$target" || -L "$target" ]]; then
     if [[ -L "$target" ]]; then
       echo "  Removing symlink $target → $(readlink "$target")"
@@ -75,6 +75,8 @@ done
 
 cp "$REPO_DIR/.zshrc" "$HOME/.zshrc"
 cp -R "$REPO_DIR/.zsh" "$HOME/.zsh"
+cp "$REPO_DIR/.tmux.conf" "$HOME/.tmux.conf"
+cp "$REPO_DIR/.screenrc" "$HOME/.screenrc"
 
 # Git config (XDG standard — git reads ~/.config/git/config natively)
 mkdir -p "$HOME/.config/git"
@@ -104,6 +106,16 @@ fi
 # --- Runtime directories ---
 mkdir -p "$HOME/.zsh/cache"
 [[ ! -f "$HOME/.zsh/local.zsh" ]] && echo "# Local overrides — not tracked in git" > "$HOME/.zsh/local.zsh"
+
+# --- tmux plugin manager ---
+if command -v tmux &>/dev/null; then
+  if $FORCE || [[ ! -d "$HOME/.tmux/plugins/tpm" ]]; then
+    echo -e "${YELLOW}Installing tmux plugin manager...${NC}"
+    $FORCE && rm -rf "$HOME/.tmux/plugins/tpm"
+    git clone --depth=1 https://github.com/tmux-plugins/tpm "$HOME/.tmux/plugins/tpm"
+    "$HOME/.tmux/plugins/tpm/bin/install_plugins"
+  fi
+fi
 
 # --- Neovim (kickstart.nvim) ---
 if $FORCE || [[ ! -d "$HOME/.config/nvim" ]]; then
