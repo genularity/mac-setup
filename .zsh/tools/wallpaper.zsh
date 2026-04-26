@@ -11,7 +11,8 @@ _wallpaper_sync() {
   root=$(git rev-parse --show-toplevel 2>/dev/null)
 
   if [[ -n "$root" && -L "$root/.wallpaper" ]]; then
-    local target=${root}/.wallpaper:A
+    local target="$root/.wallpaper"
+    target=${target:A}
     if [[ -f "$target" ]]; then
       desktoppr "$target" 2>/dev/null
       _WALLPAPER_ACTIVE=1
