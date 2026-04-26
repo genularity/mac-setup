@@ -98,3 +98,6 @@ killallclaude() {
   pkill -f 'claude' 2>/dev/null
   echo "Killed all Claude processes"
 }
+
+# Claude Code — always start with tmux teammate mode for agent teams (iTerm2 split panes)
+claude() { command claude --teammate-mode tmux "$@" }

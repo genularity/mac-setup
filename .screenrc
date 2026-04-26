@@ -1,0 +1,89 @@
+# ── Core behaviour ─────────────────────────────────────────────────────────────
+startup_message off                # skip the copyright splash
+vbell off                          # no visual bell
+bell_msg ""                        # no bell message
+defscrollback 50000                # scrollback buffer
+defutf8 on                         # UTF-8 everywhere
+encoding UTF-8 UTF-8
+deflogin off                       # don't spawn login shells (faster)
+autodetach on                      # detach on hangup rather than exit
+
+# ── Escape key (prefix) ────────────────────────────────────────────────────────
+# Ctrl+a is default — keep it, but also allow Ctrl+a Ctrl+a to send literal
+escape ^Aa
+
+# ── Scrolling ─────────────────────────────────────────────────────────────────
+termcapinfo xterm* ti@:te@         # enable scrollback in xterm/iTerm2
+termcapinfo xterm-256color ti@:te@
+
+# ── Mouse ─────────────────────────────────────────────────────────────────────
+# (screen doesn't support mouse natively — handled by terminal emulator)
+
+# ── Window numbering ──────────────────────────────────────────────────────────
+bind c screen 1                    # new windows start at 1 not 0
+bind ^c screen 1
+
+# ── Vi-style navigation ────────────────────────────────────────────────────────
+markkeys h=^B:l=^F:$=^E           # copy mode: h/l for back/forward word
+markkeys ^u=^B:^d=^F              # Ctrl+u / Ctrl+d for half-page scroll
+
+# ── Split navigation (vim-style) ──────────────────────────────────────────────
+bind h focus left
+bind j focus down
+bind k focus up
+bind l focus right
+bind | split -v
+bind - split
+bind x remove                      # close current region
+bind X only                        # close all other regions
+bind = resize =                    # equalise splits
+bind + resize +5
+bind _ resize -5
+
+# ── Handy bindings ────────────────────────────────────────────────────────────
+bind r source ~/.screenrc          # reload config
+bind d detach
+bind D pow_detach                  # detach and logout
+bind K confirm kill                # kill window with confirmation
+bind \ quit                        # quit screen entirely
+bind [ copy                        # enter copy mode
+bind ] paste .                     # paste
+
+# ── Window list ───────────────────────────────────────────────────────────────
+bind w windowlist -b               # show window list
+
+# ── 256 colour ────────────────────────────────────────────────────────────────
+term screen-256color
+attrcolor b ".I"                   # allow bold colours
+termcapinfo xterm-256color 'Co#256:AB=\E[48;5;%dm:AF=\E[38;5;%dm'
+
+# ── Status bar ────────────────────────────────────────────────────────────────
+# Tokyo Night palette in 256-colour:
+#   235 = #1c1e2e (background)      61  = #565f89 (dim)
+#   111 = #7ba5eb (blue)            215 = #ff9e64 (orange)
+#   189 = #c4cbe4 (foreground)      222 = #e2c573 (yellow)
+
+hardstatus off
+
+# Caption: per-window status line at the bottom
+caption always "%{= 235 235}"
+caption string "%{= 235 235} %{= 61 235}%H%{= 235 235}  %{= 111 235}%S%{= 235 235}  %-w%{= 235 111}%n %t%{= 235 235}%+w%=%{= 61 235} %D %d %b "
+
+# Caption field breakdown:
+#   %H          hostname
+#   %S          session name
+#   %-w         windows before current  (dim)
+#   %n %t       current window number + title  (highlighted)
+#   %+w         windows after current   (dim)
+#   %=          right-align the rest
+#   %D %d %b    day-of-week, day, month
+
+# ── Window titles ─────────────────────────────────────────────────────────────
+shelltitle "$ |zsh"               # auto-title from shell prompt
+defhstatus "^En"                   # window title = running command
+
+# ── Copy mode ─────────────────────────────────────────────────────────────────
+# Ctrl+a [ enters copy mode
+# Space  = begin selection
+# Enter  = copy selection
+# Ctrl+a ] pastes
