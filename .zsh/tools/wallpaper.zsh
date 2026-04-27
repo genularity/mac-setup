@@ -3,8 +3,17 @@
 
 command -v desktoppr &>/dev/null || return
 
-_WALLPAPER_DEFAULT=$(desktoppr 2>/dev/null)
+_WALLPAPER_DEFAULTS=("${(@f)$(desktoppr 2>/dev/null)}")
 _WALLPAPER_ACTIVE=0
+
+_wallpaper_restore() {
+  local i=0
+  local wp
+  for wp in "${_WALLPAPER_DEFAULTS[@]}"; do
+    [[ -n "$wp" ]] && desktoppr $i "$wp" 2>/dev/null
+    (( i++ ))
+  done
+}
 
 _wallpaper_sync() {
   local root
@@ -18,9 +27,7 @@ _wallpaper_sync() {
       _WALLPAPER_ACTIVE=1
     fi
   elif (( _WALLPAPER_ACTIVE )); then
-    if [[ -n "$_WALLPAPER_DEFAULT" ]]; then
-      desktoppr "$_WALLPAPER_DEFAULT" 2>/dev/null
-    fi
+    _wallpaper_restore
     _WALLPAPER_ACTIVE=0
   fi
 }
@@ -61,9 +68,7 @@ wp() {
         rm "$root/.wallpaper"
         echo "Wallpaper cleared"
         _WALLPAPER_ACTIVE=0
-        if [[ -n "$_WALLPAPER_DEFAULT" ]]; then
-          desktoppr "$_WALLPAPER_DEFAULT" 2>/dev/null
-        fi
+        _wallpaper_restore
       else
         echo "wp: no .wallpaper symlink found in $root" >&2
         return 1
