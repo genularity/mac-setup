@@ -7,12 +7,8 @@ _WALLPAPER_DEFAULTS=("${(@f)$(desktoppr 2>/dev/null)}")
 _WALLPAPER_ACTIVE=0
 
 _wallpaper_restore() {
-  local i=0
-  local wp
-  for wp in "${_WALLPAPER_DEFAULTS[@]}"; do
-    [[ -n "$wp" ]] && desktoppr $i "$wp" 2>/dev/null
-    (( i++ ))
-  done
+  local wp="$_WALLPAPER_DEFAULTS[1]"
+  [[ -n "$wp" ]] && desktoppr 0 "$wp" 2>/dev/null
 }
 
 _wallpaper_sync() {
@@ -23,7 +19,7 @@ _wallpaper_sync() {
     local target="$root/.wallpaper"
     target=${target:A}
     if [[ -f "$target" ]]; then
-      desktoppr "$target" 2>/dev/null
+      desktoppr 0 "$target" 2>/dev/null
       _WALLPAPER_ACTIVE=1
     fi
   elif (( _WALLPAPER_ACTIVE )); then
