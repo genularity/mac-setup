@@ -112,16 +112,20 @@ if command -v tmux &>/dev/null; then
   if $FORCE || [[ ! -d "$HOME/.tmux/plugins/tpm" ]]; then
     echo -e "${YELLOW}Installing tmux plugin manager...${NC}"
     $FORCE && rm -rf "$HOME/.tmux/plugins/tpm"
+    mkdir -p "$HOME/.tmux/plugins"
     git clone --depth=1 https://github.com/tmux-plugins/tpm "$HOME/.tmux/plugins/tpm"
     "$HOME/.tmux/plugins/tpm/bin/install_plugins"
   fi
 fi
 
-# --- Neovim (kickstart.nvim) ---
+# --- Neovim (LazyVim) ---
 if $FORCE || [[ ! -d "$HOME/.config/nvim" ]]; then
-  echo -e "${YELLOW}Installing kickstart.nvim...${NC}"
-  $FORCE && rm -rf "$HOME/.config/nvim"
-  git clone --depth=1 https://github.com/nvim-lua/kickstart.nvim.git "$HOME/.config/nvim"
+  echo -e "${YELLOW}Installing LazyVim...${NC}"
+  if $FORCE; then
+    rm -rf "$HOME/.config/nvim" "$HOME/.local/share/nvim" "$HOME/.local/state/nvim" "$HOME/.cache/nvim"
+  fi
+  git clone --depth=1 https://github.com/LazyVim/starter "$HOME/.config/nvim"
+  rm -rf "$HOME/.config/nvim/.git"
 fi
 
 # --- Terminal.app font ---
@@ -137,7 +141,7 @@ fi
 # --- VS Code terminal font ---
 VSCODE_SETTINGS="$HOME/Library/Application Support/Code/User/settings.json"
 if [[ -f "$VSCODE_SETTINGS" ]]; then
-  if $FORCE || ! grep -q 'terminal.integrated.fontFamily' "$VSCODE_SETTINGS"; then
+  if ! grep -q 'terminal.integrated.fontFamily' "$VSCODE_SETTINGS"; then
     echo -e "${YELLOW}Setting VS Code terminal font...${NC}"
     # Insert font settings before the closing brace (gsed supports \n, macOS sed doesn't)
     gsed -i 's/}$/,\n    "terminal.integrated.fontFamily": "JetBrainsMono Nerd Font Mono",\n    "terminal.integrated.fontSize": 14\n}/' "$VSCODE_SETTINGS"
@@ -153,22 +157,70 @@ elif [[ "$OSTYPE" == darwin* ]]; then
 VSCEOF
 fi
 
-# --- Claude Code statusline ---
-if command -v npx &>/dev/null; then
-  CLAUDE_SETTINGS="$HOME/.claude/settings.json"
-  mkdir -p "$HOME/.claude"
-  if $FORCE || [[ ! -f "$CLAUDE_SETTINGS" ]]; then
-    echo -e "${YELLOW}Configuring Claude Code statusline...${NC}"
-    cat > "$CLAUDE_SETTINGS" << 'CLEOF'
+# --- Claude Code settings ---
+CLAUDE_SETTINGS="$HOME/.claude/settings.json"
+mkdir -p "$HOME/.claude"
+if $FORCE || [[ ! -f "$CLAUDE_SETTINGS" ]]; then
+  echo -e "${YELLOW}Configuring Claude Code settings...${NC}"
+  cat > "$CLAUDE_SETTINGS" << 'CLEOF'
 {
+  "$schema": "https://json.schemastore.org/claude-code-settings.json",
+  "model": "sonnet",
+  "viewMode": "verbose",
+  "effortLevel": "medium",
+  "showThinkingSummaries": true,
+  "skipDangerousModePermissionPrompt": true,
+  "attribution": {
+    "commit": "",
+    "pr": ""
+  },
+  "permissions": {
+    "allow": [
+      "Bash(kubectl get:*)",
+      "Bash(kubectx)",
+      "Bash(kubectx:*)",
+      "Read(/tmp/**)",
+      "Read(~/code/**)",
+      "WebFetch(*)"
+    ]
+  },
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "if echo \"$CLAUDE_TOOL_INPUT\" | grep -q 'kubectl'; then kubectx 2>/dev/null && echo \"[hook] active kube context shown above — confirm before proceeding\"; fi"
+          }
+        ]
+      }
+    ]
+  },
+  "enabledPlugins": {
+    "frontend-design@claude-plugins-official": true,
+    "superpowers@claude-plugins-official": true
+  },
   "statusLine": {
     "type": "command",
     "command": "npx -y @owloops/claude-powerline --theme=tokyo-night --style=powerline"
   }
 }
 CLEOF
-  fi
 fi
+
+# --- OpenCode config ---
+OPENCODE_DIR="$HOME/.config/opencode"
+mkdir -p "$OPENCODE_DIR"
+for f in opencode.json tui.json AGENTS.md; do
+  target="$OPENCODE_DIR/$f"
+  if $FORCE || [[ ! -f "$target" ]]; then
+    if [[ -f "$target" ]] && ! $SKIP_BACKUP; then
+      mv "$target" "$target.backup.$(date +%Y%m%d_%H%M%S)"
+    fi
+    cp "$REPO_DIR/config/opencode/$f" "$target"
+  fi
+done
 
 # --- macOS defaults ---
 if [[ "$OSTYPE" == darwin* && -f "$REPO_DIR/macos_defaults.sh" ]]; then
