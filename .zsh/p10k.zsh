@@ -16,6 +16,7 @@
   typeset -g POWERLEVEL9K_LEFT_PROMPT_ELEMENTS=(
     os_icon
     dir
+    mkt_emoji
     vcs
   )
 
