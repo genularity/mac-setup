@@ -195,9 +195,10 @@ fi
 # --- Record installed version ---
 VERSION_FILE="$HOME/.local/share/mac-setup/installed.json"
 mkdir -p "$(dirname "$VERSION_FILE")"
+_version="$(git -C "$REPO_DIR" describe --exact-match --tags HEAD 2>/dev/null || git -C "$REPO_DIR" rev-parse HEAD 2>/dev/null || echo "unknown")"
 cat > "$VERSION_FILE" << VEREOF
 {
-  "sha": "$(git -C "$REPO_DIR" rev-parse HEAD 2>/dev/null || echo "unknown")",
+  "sha": "$_version",
   "branch": "$(git -C "$REPO_DIR" rev-parse --abbrev-ref HEAD 2>/dev/null || echo "unknown")",
   "date": "$(date -u +"%Y-%m-%dT%H:%M:%SZ")",
   "repo": "$(git -C "$REPO_DIR" remote get-url origin 2>/dev/null || echo "local")"
