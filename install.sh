@@ -92,6 +92,14 @@ if $FORCE || ! git config --file "$HOME/.gitconfig" user.name &>/dev/null; then
   git config --file "$HOME/.gitconfig" user.email "$git_email"
 fi
 
+# --- bat theme ---
+if command -v bat &>/dev/null; then
+  echo -e "${YELLOW}Installing bat themes...${NC}"
+  mkdir -p "$HOME/.config/bat/themes"
+  cp "$REPO_DIR/config/bat/themes/"*.tmTheme "$HOME/.config/bat/themes/"
+  bat cache --build
+fi
+
 # iTerm2 dynamic profile
 if [[ "$OSTYPE" == darwin* && -d "/Applications/iTerm.app" ]]; then
   echo -e "${YELLOW}Installing iTerm2 profile...${NC}"

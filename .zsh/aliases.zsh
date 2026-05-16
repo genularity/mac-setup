@@ -3,11 +3,17 @@
 # --- Modern CLI replacements ---
 command -v lsd   &>/dev/null && alias ls='lsd'
 command -v bat &>/dev/null && alias cat='bat'
-command -v dust  &>/dev/null && alias du='dust'
-command -v duf   &>/dev/null && alias df='duf'
-command -v rg    &>/dev/null && alias grep='rg'
+command -v dust  &>/dev/null && du() {
+  local args=()
+  for a in "$@"; do [[ "$a" == -* ]] && [[ -z "${a//[-sh]/}" ]] || args+=("$a"); done
+  dust "${args[@]}"
+}
+command -v duf   &>/dev/null && df() {
+  local args=()
+  for a in "$@"; do [[ "$a" == -h ]] || args+=("$a"); done
+  duf "${args[@]}"
+}
 command -v doggo &>/dev/null && alias nslookup='doggo' dig='doggo'
-command -v gping &>/dev/null && alias ping='gping'
 command -v nvim &>/dev/null && alias vi='nvim' vim='nvim' v='nvim'
 
 # --- Functions ---
