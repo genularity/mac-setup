@@ -162,51 +162,7 @@ CLAUDE_SETTINGS="$HOME/.claude/settings.json"
 mkdir -p "$HOME/.claude"
 if $FORCE || [[ ! -f "$CLAUDE_SETTINGS" ]]; then
   echo -e "${YELLOW}Configuring Claude Code settings...${NC}"
-  cat > "$CLAUDE_SETTINGS" << 'CLEOF'
-{
-  "$schema": "https://json.schemastore.org/claude-code-settings.json",
-  "model": "sonnet",
-  "viewMode": "verbose",
-  "effortLevel": "medium",
-  "showThinkingSummaries": true,
-  "skipDangerousModePermissionPrompt": true,
-  "attribution": {
-    "commit": "",
-    "pr": ""
-  },
-  "permissions": {
-    "allow": [
-      "Bash(kubectl get:*)",
-      "Bash(kubectx)",
-      "Bash(kubectx:*)",
-      "Read(/tmp/**)",
-      "Read(~/code/**)",
-      "WebFetch(*)"
-    ]
-  },
-  "hooks": {
-    "PreToolUse": [
-      {
-        "matcher": "Bash",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "if echo \"$CLAUDE_TOOL_INPUT\" | grep -q 'kubectl'; then kubectx 2>/dev/null && echo \"[hook] active kube context shown above — confirm before proceeding\"; fi"
-          }
-        ]
-      }
-    ]
-  },
-  "enabledPlugins": {
-    "frontend-design@claude-plugins-official": true,
-    "superpowers@claude-plugins-official": true
-  },
-  "statusLine": {
-    "type": "command",
-    "command": "npx -y @owloops/claude-powerline --theme=tokyo-night --style=powerline"
-  }
-}
-CLEOF
+  cp "$REPO_DIR/config/claude/settings.json" "$CLAUDE_SETTINGS"
 fi
 
 # --- OpenCode config ---
@@ -227,6 +183,18 @@ if [[ "$OSTYPE" == darwin* && -f "$REPO_DIR/macos_defaults.sh" ]]; then
   echo
   bash "$REPO_DIR/macos_defaults.sh"
 fi
+
+# --- Record installed version ---
+VERSION_FILE="$HOME/.local/share/mac-setup/installed.json"
+mkdir -p "$(dirname "$VERSION_FILE")"
+cat > "$VERSION_FILE" << VEREOF
+{
+  "sha": "$(git -C "$REPO_DIR" rev-parse HEAD 2>/dev/null || echo "unknown")",
+  "branch": "$(git -C "$REPO_DIR" rev-parse --abbrev-ref HEAD 2>/dev/null || echo "unknown")",
+  "date": "$(date -u +"%Y-%m-%dT%H:%M:%SZ")",
+  "repo": "$(git -C "$REPO_DIR" remote get-url origin 2>/dev/null || echo "local")"
+}
+VEREOF
 
 echo
 echo -e "${GREEN}=== Setup Complete ===${NC}"
