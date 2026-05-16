@@ -190,6 +190,8 @@
   "Transparency" : 0,
   "Blinking Cursor" : false,
   "Cursor Type" : 2,
+  "Smart Cursor Color" : true,
+  "Animate Movement" : true,
   "Prompt Before Closing 2" : false,
   "Close Sessions On End" : true,
   "Mouse Reporting" : true,
