@@ -37,16 +37,16 @@ if [[ "$OSTYPE" == darwin* ]]; then
     fi
   fi
   echo -e "${YELLOW}Installing packages from Brewfile...${NC}"
-  brew bundle --verbose --file="$REPO_DIR/Brewfile"
+  brew bundle --verbose --file="$REPO_DIR/Brewfile" || echo -e "${RED}Some Brewfile packages failed — continuing anyway.${NC}"
 elif [[ -f /etc/arch-release ]]; then
   echo -e "${YELLOW}Installing with pacman...${NC}"
-  sudo pacman -S --noconfirm bat dust duf fd lsd neovim ripgrep zoxide
+  sudo pacman -S --noconfirm bat dust duf fd lsd neovim ripgrep zoxide || echo -e "${RED}Some pacman packages failed — continuing anyway.${NC}"
 elif [[ -f /etc/fedora-release ]]; then
   echo -e "${YELLOW}Installing with dnf...${NC}"
-  sudo dnf install -y bat fd-find neovim ripgrep zoxide
+  sudo dnf install -y bat fd-find neovim ripgrep zoxide || echo -e "${RED}Some dnf packages failed — continuing anyway.${NC}"
 elif [[ -f /etc/debian_version ]]; then
   echo -e "${YELLOW}Installing with apt...${NC}"
-  sudo apt update && sudo apt install -y bat fd-find neovim ripgrep zoxide
+  sudo apt update && sudo apt install -y bat fd-find neovim ripgrep zoxide || echo -e "${RED}Some apt packages failed — continuing anyway.${NC}"
   [[ ! -L /usr/local/bin/bat ]] && sudo ln -sf "$(which batcat)" /usr/local/bin/bat 2>/dev/null || true
   [[ ! -L /usr/local/bin/fd ]]  && sudo ln -sf "$(which fdfind)" /usr/local/bin/fd 2>/dev/null || true
 else
@@ -121,8 +121,11 @@ if command -v tmux &>/dev/null; then
     echo -e "${YELLOW}Installing tmux plugin manager...${NC}"
     $FORCE && rm -rf "$HOME/.tmux/plugins/tpm"
     mkdir -p "$HOME/.tmux/plugins"
-    git clone --depth=1 https://github.com/tmux-plugins/tpm "$HOME/.tmux/plugins/tpm"
-    "$HOME/.tmux/plugins/tpm/bin/install_plugins"
+    if git clone --depth=1 https://github.com/tmux-plugins/tpm "$HOME/.tmux/plugins/tpm"; then
+      "$HOME/.tmux/plugins/tpm/bin/install_plugins" || echo -e "${RED}TPM plugin install failed — continuing anyway.${NC}"
+    else
+      echo -e "${RED}TPM clone failed — skipping.${NC}"
+    fi
   fi
 fi
 
@@ -132,8 +135,11 @@ if $FORCE || [[ ! -d "$HOME/.config/nvim" ]]; then
   if $FORCE; then
     rm -rf "$HOME/.config/nvim" "$HOME/.local/share/nvim" "$HOME/.local/state/nvim" "$HOME/.cache/nvim"
   fi
-  git clone --depth=1 https://github.com/LazyVim/starter "$HOME/.config/nvim"
-  rm -rf "$HOME/.config/nvim/.git"
+  if git clone --depth=1 https://github.com/LazyVim/starter "$HOME/.config/nvim"; then
+    rm -rf "$HOME/.config/nvim/.git"
+  else
+    echo -e "${RED}LazyVim clone failed — skipping.${NC}"
+  fi
 fi
 
 # --- Terminal.app font ---
@@ -143,7 +149,7 @@ if [[ "$OSTYPE" == darwin* ]]; then
     tell application "Terminal"
       set font name of settings set "Basic" to "JetBrainsMonoNFM-Regular"
       set font size of settings set "Basic" to 14
-    end tell'
+    end tell' || echo -e "${RED}Terminal.app font set failed — set manually in Terminal > Preferences.${NC}"
 fi
 
 # --- VS Code terminal font ---
