@@ -1,1 +1,0 @@
-Emoji or mkt
