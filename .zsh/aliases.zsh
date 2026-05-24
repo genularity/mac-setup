@@ -1,8 +1,5 @@
 # Aliases and utility functions
 
-# --- AWS ---
-alias assume=". assume"
-
 # --- Modern CLI replacements ---
 command -v lsd   &>/dev/null && alias ls='lsd'
 command -v bat &>/dev/null && alias cat='bat'

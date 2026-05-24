@@ -58,7 +58,7 @@ echo
 echo -e "${YELLOW}Installing config files...${NC}"
 
 # Backup or remove existing configs
-for target in "$HOME/.zshrc" "$HOME/.zsh" "$HOME/.config/git/config" "$HOME/.tmux.conf" "$HOME/.screenrc"; do
+for target in "$HOME/.zshrc" "$HOME/.zsh" "$HOME/.config/git/config" "$HOME/.ssh/config" "$HOME/.tmux.conf" "$HOME/.screenrc"; do
   if [[ -e "$target" || -L "$target" ]]; then
     if [[ -L "$target" ]]; then
       echo "  Removing symlink $target → $(readlink "$target")"
@@ -81,6 +81,14 @@ cp "$REPO_DIR/.screenrc" "$HOME/.screenrc"
 # Git config (XDG standard — git reads ~/.config/git/config natively)
 mkdir -p "$HOME/.config/git"
 cp "$REPO_DIR/config/git/config" "$HOME/.config/git/config"
+
+# SSH config
+mkdir -p "$HOME/.ssh" "$HOME/.ssh/sockets"
+chmod 700 "$HOME/.ssh"
+if $FORCE || [[ ! -f "$HOME/.ssh/config" ]]; then
+  cp "$REPO_DIR/config/ssh/config" "$HOME/.ssh/config"
+  chmod 600 "$HOME/.ssh/config"
+fi
 
 # Git user details (stored in ~/.gitconfig, separate from shared config)
 if $FORCE || ! git config --file "$HOME/.gitconfig" user.name &>/dev/null; then
@@ -219,6 +227,6 @@ echo -e "Run ${YELLOW}p10k configure${NC} to set up your prompt."
 echo -e "Enable ${YELLOW}VS Code Settings Sync${NC} for editor preferences."
 echo
 echo -e "${YELLOW}=== Install from the Mac App Store ===${NC}"
-echo "  Wins · 1Password · Perplexity · Plex · Plex Dash · Messenger · Telegram · WhatsApp"
+echo "  Wins · Perplexity · Plex · Plex Dash · Messenger · Telegram · WhatsApp"
 echo
 echo -e "Font: ${YELLOW}JetBrainsMono Nerd Font${NC} (terminal + VS Code)"

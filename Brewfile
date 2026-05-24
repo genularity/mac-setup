@@ -47,10 +47,6 @@ brew "grep"
 cask "font-jetbrains-mono-nerd-font"
 cask "font-meslo-lg-nerd-font"
 
-# 1Password
-cask "1password"
-cask "1password-cli"
-
 # Apps
 cask "chatgpt"
 cask "claude"
