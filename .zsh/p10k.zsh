@@ -63,6 +63,7 @@
   typeset -g POWERLEVEL9K_DIR_MIN_COMMAND_COLUMNS_PCT=50
   typeset -g POWERLEVEL9K_DIR_HYPERLINK=false
   typeset -g POWERLEVEL9K_DIR_SHOW_WRITABLE=v3
+  typeset -g POWERLEVEL9K_DIR_ICON_BEFORE_CONTENT=false
 
   local anchor_files=(
     .bzr .citc .git .hg .node-version .python-version .go-version
