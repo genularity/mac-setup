@@ -214,6 +214,10 @@
 
   # === Transient prompt (disabled) ===
   typeset -g POWERLEVEL9K_TRANSIENT_PROMPT=off
+
+  # === dir: optional per-folder icons + .dirglyph marker override ===
+  # See ~/.zsh/p10k-dirglyph.zsh — delete/rename that file to disable.
+  [[ -f ~/.zsh/p10k-dirglyph.zsh ]] && source ~/.zsh/p10k-dirglyph.zsh
 }
 
 (( ${#p10k_config_opts} )) && setopt ${p10k_config_opts[@]}
